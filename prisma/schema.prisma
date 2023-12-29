@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Tabela Ncm
+model Ncm {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  code      String    @unique @db.VarChar(10)
+  Product   Product[]
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @updatedAt
+}
+
+// Tabela Product
+model Product {
+  id        Int      @id @default(autoincrement())
+  name      String
+  ncmId     Int
+  buyPrice  Decimal  @db.Decimal(10, 2)
+  salePrice Decimal  @db.Decimal(10, 2)
+  balance   Int      @default(0)
+  ncm       Ncm      @relation(fields: [ncmId], references: [id])
+  Input     Input[]
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+}
+
+// Tabela Transaction
+model Transaction {
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      String
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+}
+
+// Tabela Input_Req
+model Input {
+  id         Int      @id @default(autoincrement())
+  date       DateTime
+  product_id Int
+  balance    Int
+  product    Product  @relation(fields: [product_id], references: [id])
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt
+}
