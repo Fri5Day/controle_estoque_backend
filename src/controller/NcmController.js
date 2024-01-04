@@ -1,5 +1,6 @@
 import { prisma } from "../database/prisma.js";
 
+
 export const findAll = async (req, res) => {
     try {
         const ncm = await prisma.ncm.findMany();

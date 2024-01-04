@@ -36,9 +36,9 @@ CREATE TABLE `Transaction` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Input_Req` (
+CREATE TABLE `Input` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `date` DATETIME(3) NOT NULL,
+    `date` VARCHAR(191) NOT NULL,
     `product_id` INTEGER NOT NULL,
     `balance` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -51,4 +51,4 @@ CREATE TABLE `Input_Req` (
 ALTER TABLE `Product` ADD CONSTRAINT `Product_ncmId_fkey` FOREIGN KEY (`ncmId`) REFERENCES `Ncm`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Input_Req` ADD CONSTRAINT `Input_Req_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `Product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Input` ADD CONSTRAINT `Input_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `Product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

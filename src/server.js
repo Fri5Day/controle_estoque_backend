@@ -1,6 +1,6 @@
 import express from "express";
-import { router } from "./router.js";
 import cors from "cors";
+import router from "./routers/index.js";
 
 const app = express();
 
@@ -12,6 +12,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
-app.use(router);
 
 app.listen(4000, () => console.log('Server listening on port 4000'));
+
+app.use(router);
