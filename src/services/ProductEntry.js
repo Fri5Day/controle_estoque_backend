@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-async function updateProductBalance(productId) {
+async function updateProductBalance(productId, inputBalance) {
   if (!productId) {
     throw new Error('O campo productId está vazio!');
   }
@@ -22,14 +22,15 @@ async function updateProductBalance(productId) {
     },
   });
 
-  const totalInputBalance = product?.Input?.reduce((total, input) => total + input.balance, 0) || 0;
+  //const totalInputBalance = product?.Input?.reduce((total, input) => total + input.balance, 0) || 0;
+  const updatedBalance = product.balance + inputBalance;
 
   await prisma.product.update({
     where: {
       id: productId,
     },
     data: {
-      balance: totalInputBalance,
+      balance: updatedBalance,
     },
   });
 }
@@ -39,19 +40,26 @@ async function InputCalculation(inputData) {
     throw new Error('O campo product_id está vazio!');
   }
 
-  // Cria a entrada no banco de dados
-  const createdInput = await prisma.input.create({
-    data: {
-      date: inputData.date,
-      product_id: inputData.product_id,
-      balance: inputData.balance,
-    },
-  });
 
-  // Atualiza o balance do produto relacionado à entrada após criar a nova entrada
-  await updateProductBalance(inputData.product_id);
+  try {
+    const createdInput = await prisma.input.create({
+      data: {
+        date: new Date(inputData.date),
+        product_id: inputData.product_id,
+        balance: inputData.balance,
+      },
+    });
 
-  return createdInput;
+    // Atualiza o balance do produto relacionado à entrada após criar a nova entrada
+    await updateProductBalance(inputData.product_id, inputData.balance);
+
+    return createdInput;
+  } catch (error) {
+    console.error('Erro ao criar requisição de Entrada:', error);
+    throw new Error(`Erro ao criar requisição de Entrada: ${error.message}`);
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
 export default {

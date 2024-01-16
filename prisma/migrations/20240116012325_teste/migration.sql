@@ -38,7 +38,19 @@ CREATE TABLE `Transaction` (
 -- CreateTable
 CREATE TABLE `Input` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `date` VARCHAR(191) NOT NULL,
+    `date` DATETIME(3) NOT NULL,
+    `product_id` INTEGER NOT NULL,
+    `balance` INTEGER NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updateAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Output` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `date` DATETIME(3) NOT NULL,
     `product_id` INTEGER NOT NULL,
     `balance` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -52,3 +64,6 @@ ALTER TABLE `Product` ADD CONSTRAINT `Product_ncmId_fkey` FOREIGN KEY (`ncmId`) 
 
 -- AddForeignKey
 ALTER TABLE `Input` ADD CONSTRAINT `Input_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `Product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Output` ADD CONSTRAINT `Output_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `Product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -32,6 +32,7 @@ model Product {
   Input     Input[]
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
+  Output    Output[]
 }
 
 // Tabela Transaction
@@ -46,7 +47,17 @@ model Transaction {
 // Tabela Input_Req
 model Input {
   id         Int      @id @default(autoincrement())
-  date       String
+  date       DateTime
+  product_id Int
+  balance    Int
+  product    Product  @relation(fields: [product_id], references: [id])
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt
+}
+
+model Output {
+  id         Int      @id @default(autoincrement())
+  date       DateTime
   product_id Int
   balance    Int
   product    Product  @relation(fields: [product_id], references: [id])
