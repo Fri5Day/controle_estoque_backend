@@ -28,21 +28,21 @@ async function updateProductBalanceOnExit(productId, outputBalance) {
   });
 }
 
-async function outputCalculation(inputData) {
-  if (!inputData.product_id || inputData.balance === undefined) {
+async function outputCalculation(outputData) {
+  if (!outputData.product_id || outputData.balance === undefined) {
     throw new Error('Os campos product_id ou balance estão vazios!');
   }
 
   try {
     const createdOutput = await prisma.output.create({
       data: {
-        date: new Date(inputData.date),
-        product_id: inputData.product_id,
-        balance: inputData.balance,
+        date: new Date(outputData.date),
+        product_id: outputData.product_id,
+        balance: outputData.balance,
       },
     });
 
-    await updateProductBalanceOnExit(inputData.product_id, inputData.balance);
+    await updateProductBalanceOnExit(outputData.product_id, outputData.balance);
 
     return createdOutput;
   } catch (error) {
